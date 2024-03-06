@@ -15,5 +15,38 @@ namespace ExamScheduler.Contexts
         public AppContext(DbContextOptions options) : base(options)
         {
         }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Course>()
+                .HasMany(c => c.Enrollments)
+                .WithOne(e => e.Course)
+                ;
+
+            modelBuilder.Entity<Course>()
+                .HasMany(c => c.Mentors)
+                .WithMany(m => m.Courses)
+                ;
+
+            modelBuilder.Entity<Mentor>()
+                .HasMany(m => m.Exams)
+                .WithMany(e => e.Mentors)
+                ;
+
+            modelBuilder.Entity<MentorAvailability>()
+                .HasOne(ma => ma.Mentor)
+                ;
+
+            modelBuilder.Entity<Student>()
+                .HasMany(s => s.Enrollments)
+                .WithOne(e => e.Student)
+                ;
+
+            modelBuilder.Entity<Student>()
+                .HasMany(s => s.Exams)
+                .WithOne(e => e.Student)
+                ;
+
+        }
     }
 }
