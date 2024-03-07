@@ -21,6 +21,7 @@ namespace ExamScheduler.Contexts
             modelBuilder.Entity<Course>()
                 .HasMany(c => c.Enrollments)
                 .WithOne(e => e.Course)
+                .IsRequired()
                 ;
 
             modelBuilder.Entity<Course>()
@@ -35,16 +36,20 @@ namespace ExamScheduler.Contexts
 
             modelBuilder.Entity<MentorAvailability>()
                 .HasOne(ma => ma.Mentor)
+                .WithMany()
+                .IsRequired()
                 ;
 
             modelBuilder.Entity<Student>()
                 .HasMany(s => s.Enrollments)
                 .WithOne(e => e.Student)
+                .IsRequired()
                 ;
 
             modelBuilder.Entity<Student>()
                 .HasMany(s => s.Exams)
                 .WithOne(e => e.Student)
+                .IsRequired()
                 ;
         }
     }
