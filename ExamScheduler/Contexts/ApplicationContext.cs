@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ExamScheduler.Contexts
 {
-    public class AppContext : DbContext
+    public class ApplicationContext : DbContext
     {
         public DbSet<Course> Courses { get; set; }
         public DbSet<Enrollment> Enrollments { get; set; }
@@ -12,7 +12,7 @@ namespace ExamScheduler.Contexts
         public DbSet<MentorAvailability> MentorAvailabilities { get; set; }
         public DbSet<Student> Students { get; set; }
 
-        public AppContext(DbContextOptions options) : base(options)
+        public ApplicationContext(DbContextOptions options) : base(options)
         {
         }
 
@@ -46,7 +46,6 @@ namespace ExamScheduler.Contexts
                 .HasMany(s => s.Exams)
                 .WithOne(e => e.Student)
                 ;
-
         }
     }
 }
