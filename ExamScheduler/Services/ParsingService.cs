@@ -1,6 +1,6 @@
-﻿using System.Globalization;
-using ExamScheduler.Contexts;
+﻿using ExamScheduler.Contexts;
 using ExamScheduler.Exceptions;
+using ExamScheduler.Extensions;
 using ExamScheduler.Models;
 using ExamScheduler.Models.Enums;
 
@@ -21,33 +21,23 @@ namespace ExamScheduler.Services
 
         public List<MentorAvailability> GetMentorAvailabilities(IFormFile file)
         {
-            // Get all currently active mentors from DB
             var mentors = mentorService.GetAllActive();
 
-            // Get content from file
-            var content = new List<string>();
-            using (var reader = new StreamReader(file.OpenReadStream()))
-            {
-                while (reader.Peek() >= 0)
-                {
-                    content.Add(reader.ReadLine());
-                }
-            }
+            var content = file.ReadAsList();
 
-            // Parse each line
             var output = new List<MentorAvailability>();
-            foreach (var line in content)
+            for(int i = 0; i < content.Count; i++)
             {
-                var data = line.Split(validDelimiters);
+                var data = content[i].Split(validDelimiters);
                 if (data.Length != 3)
                 {
-                    throw new InvalidMentorDataException("Uploaded file contains incorrect number of columns.");
+                    throw new InvalidMentorDataException($"Line {i + 1} contains incorrect number of columns.");
                 }
 
                 var mentor = mentors.FirstOrDefault(m => m.Name == data[0]);
                 if (mentor is null)
                 {
-                    throw new InvalidMentorDataException("Mentor not found");
+                    throw new InvalidMentorDataException($"Mentor with name \"{data[0]}\" not found");
                 }
 
                 try
