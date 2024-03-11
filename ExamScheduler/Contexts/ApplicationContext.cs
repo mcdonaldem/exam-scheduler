@@ -11,6 +11,7 @@ namespace ExamScheduler.Contexts
         public DbSet<Mentor> Mentors { get; set; }
         public DbSet<MentorAvailability> MentorAvailabilities { get; set; }
         public DbSet<Student> Students { get; set; }
+        public DbSet<StudentExamDetail> StudentExamDetails { get; set; }
 
         public ApplicationContext(DbContextOptions options) : base(options)
         {
@@ -28,6 +29,12 @@ namespace ExamScheduler.Contexts
                 .HasMany(c => c.Mentors)
                 .WithMany(m => m.Courses)
                 ;
+
+            modelBuilder.Entity<Exam>()
+                 .HasOne(e => e.StudentDetail)
+                 .WithOne(sd => sd.Exam)
+                 .IsRequired()
+                 ;
 
             modelBuilder.Entity<Mentor>()
                 .HasMany(m => m.Exams)
@@ -47,7 +54,7 @@ namespace ExamScheduler.Contexts
                 ;
 
             modelBuilder.Entity<Student>()
-                .HasMany(s => s.Exams)
+                .HasMany(s => s.ExamDetails)
                 .WithOne(e => e.Student)
                 .IsRequired()
                 ;
