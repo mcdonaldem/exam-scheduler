@@ -1,9 +1,7 @@
 ﻿namespace ExamScheduler.Models
 {
-    public class Mentor
+    public class Mentor : Person
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
         public bool IsActive { get; set; }
         public List<Course> Courses { get; set; }
         public List<Exam> Exams { get; set; }

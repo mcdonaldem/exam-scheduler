@@ -1,9 +1,7 @@
 ﻿namespace ExamScheduler.Models
 {
-    public class Student
+    public class Student : Person
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
         public List<Enrollment> Enrollments { get; set; }
         public List<StudentExamDetail> ExamDetails { get; set; }
 

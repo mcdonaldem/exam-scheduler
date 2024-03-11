@@ -20,14 +20,22 @@ namespace ExamScheduler.Contexts
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Course>()
-                .HasMany(c => c.Enrollments)
-                .WithOne(e => e.Course)
+                .HasMany(c => c.Mentors)
+                .WithMany(m => m.Courses)
+                ;
+
+            modelBuilder.Entity<Enrollment>()
+                .HasOne(e => e.Student)
+                .WithMany(s => s.Enrollments)
+                .HasForeignKey(e => e.StudentId)
                 .IsRequired()
                 ;
 
-            modelBuilder.Entity<Course>()
-                .HasMany(c => c.Mentors)
-                .WithMany(m => m.Courses)
+            modelBuilder.Entity<Enrollment>()
+                .HasOne(e => e.Course)
+                .WithMany(s => s.Enrollments)
+                .HasForeignKey(e => e.CourseId)
+                .IsRequired()
                 ;
 
             modelBuilder.Entity<Exam>()
@@ -35,6 +43,10 @@ namespace ExamScheduler.Contexts
                  .WithOne(sd => sd.Exam)
                  .IsRequired()
                  ;
+
+            modelBuilder.Entity<Mentor>()
+                .ToTable("Mentors")
+                ;
 
             modelBuilder.Entity<Mentor>()
                 .HasMany(m => m.Exams)
@@ -45,6 +57,10 @@ namespace ExamScheduler.Contexts
                 .HasOne(ma => ma.Mentor)
                 .WithMany()
                 .IsRequired()
+                ;
+
+            modelBuilder.Entity<Student>()
+                .ToTable("Students")
                 ;
 
             modelBuilder.Entity<Student>()
