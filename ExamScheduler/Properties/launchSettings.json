@@ -23,7 +23,11 @@
       "launchBrowser": true,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "DB_CONNECTION": "Server=localhost\\\\SQLEXPRESS;Database=exam_sched;Trusted_Connection=True;"
+        "DB_CONNECTION": "Server=localhost\\\\SQLEXPRESS;Database=exam_sched;Trusted_Connection=True;",
+        "EXAM_DURATION": "02:00",
+        "MORNING_START": "09:30",
+        "EARLY_AFTERNOON_START": "13:00",
+        "LATE_AFTERNOON_START": "15:30"
       }
     },
     "Docker": {
