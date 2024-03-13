@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Design.Internal;
-
-namespace ExamScheduler.Models
+﻿namespace ExamScheduler.Entities
 {
     public class AlgoLanguage
     {

@@ -1,5 +1,5 @@
 ﻿using ExamScheduler.Contexts;
-using ExamScheduler.Models;
+using ExamScheduler.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace ExamScheduler.Services

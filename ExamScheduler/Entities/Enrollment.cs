@@ -1,6 +1,4 @@
-﻿using System.Numerics;
-
-namespace ExamScheduler.Models
+﻿namespace ExamScheduler.Entities
 {
     public class Enrollment
     {

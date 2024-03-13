@@ -1,8 +1,7 @@
-﻿using ExamScheduler.Contexts;
+﻿using ExamScheduler.Entities;
+using ExamScheduler.Entities.Enums;
 using ExamScheduler.Exceptions;
 using ExamScheduler.Extensions;
-using ExamScheduler.Models;
-using ExamScheduler.Models.Enums;
 
 namespace ExamScheduler.Services
 {

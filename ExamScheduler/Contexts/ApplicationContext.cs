@@ -1,4 +1,5 @@
-﻿using ExamScheduler.Models;
+﻿using ExamScheduler.Entities;
+using ExamScheduler.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace ExamScheduler.Contexts
@@ -10,9 +11,7 @@ namespace ExamScheduler.Contexts
         public DbSet<Enrollment> Enrollments { get; set; }
         public DbSet<Exam> Exams { get; set; }
         public DbSet<Mentor> Mentors { get; set; }
-        public DbSet<MentorAvailability> MentorAvailabilities { get; set; }
         public DbSet<Student> Students { get; set; }
-        public DbSet<StudentExamDetail> StudentExamDetails { get; set; }
 
         public ApplicationContext(DbContextOptions options) : base(options)
         {
@@ -39,13 +38,11 @@ namespace ExamScheduler.Contexts
                 .IsRequired()
                 ;
 
-
             modelBuilder.Entity<Exam>()
-                 .HasOne(e => e.StudentDetail)
-                 .WithOne()
-                 .HasForeignKey<Exam>(e => e.StudentDetailId)
-                 .IsRequired()
-                 ;
+                .HasOne(e => e.Student)
+                .WithMany(s => s.Exams)
+                .IsRequired()
+                ;
 
             modelBuilder.Entity<Mentor>()
                 .ToTable("Mentors")
@@ -61,12 +58,6 @@ namespace ExamScheduler.Contexts
                 .WithMany(a => a.Mentors)
                 ;
 
-            modelBuilder.Entity<MentorAvailability>()
-                .HasOne(ma => ma.Mentor)
-                .WithMany()
-                .IsRequired()
-                ;
-
             modelBuilder.Entity<Student>()
                 .ToTable("Students")
                 ;
@@ -74,18 +65,6 @@ namespace ExamScheduler.Contexts
             modelBuilder.Entity<Student>()
                 .HasMany(s => s.Enrollments)
                 .WithOne(e => e.Student)
-                .IsRequired()
-                ;
-
-            modelBuilder.Entity<Student>()
-                .HasMany(s => s.ExamDetails)
-                .WithOne(e => e.Student)
-                .IsRequired()
-                ;
-
-            modelBuilder.Entity<StudentExamDetail>()
-                .HasOne(s => s.AlgoLanguage)
-                .WithMany()
                 .IsRequired()
                 ;
         }

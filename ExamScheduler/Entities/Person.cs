@@ -1,4 +1,4 @@
-﻿namespace ExamScheduler.Models
+﻿namespace ExamScheduler.Entities
 {
     public abstract class Person
     {

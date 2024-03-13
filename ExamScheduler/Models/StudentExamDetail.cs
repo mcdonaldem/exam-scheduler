@@ -1,8 +1,7 @@
-﻿namespace ExamScheduler.Models
+﻿namespace ExamScheduler.Entities
 {
     public class StudentExamDetail
     {
-        public int Id { get; set; }
         public Student Student { get; set; }
         public AlgoLanguage AlgoLanguage { get; set; }
     }

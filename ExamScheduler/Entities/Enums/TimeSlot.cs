@@ -1,4 +1,4 @@
-﻿namespace ExamScheduler.Models.Enums
+﻿namespace ExamScheduler.Entities.Enums
 {
     public enum TimeSlot
     {
