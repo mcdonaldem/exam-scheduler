@@ -58,7 +58,7 @@ namespace ExamScheduler.Contexts
 
             modelBuilder.Entity<Mentor>()
                 .HasMany(m => m.AlgoLanguages)
-                .WithMany()
+                .WithMany(a => a.Mentors)
                 ;
 
             modelBuilder.Entity<MentorAvailability>()

@@ -6,5 +6,6 @@ namespace ExamScheduler.Models
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public List<Mentor> Mentors { get; set; }
     }
 }
