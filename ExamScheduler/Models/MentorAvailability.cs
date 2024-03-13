@@ -1,5 +1,5 @@
 ﻿using ExamScheduler.Entities;
-using ExamScheduler.Entities.Enums;
+using ExamScheduler.Models.Enums;
 
 namespace ExamScheduler.Models
 {
