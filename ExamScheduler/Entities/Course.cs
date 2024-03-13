@@ -11,8 +11,8 @@
 
         public Course()
         {
-            Enrollments = new List<Enrollment>();
-            Mentors = new List<Mentor>();
+            Enrollments = [];
+            Mentors = [];
         }
     }
 }

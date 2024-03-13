@@ -9,8 +9,8 @@
 
         public Mentor()
         {
-            Courses = new List<Course>();
-            Exams = new List<Exam>();
+            Courses = [];
+            Exams = [];
         }
     }
 }

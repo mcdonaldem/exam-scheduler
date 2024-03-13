@@ -7,8 +7,8 @@
 
         public Student()
         {
-            Enrollments = new List<Enrollment>();
-            Exams = new List<Exam>();
+            Enrollments = [];
+            Exams = [];
         }
     }
 }

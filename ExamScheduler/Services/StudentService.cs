@@ -4,14 +4,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ExamScheduler.Services
 {
-    public class StudentService
+    public class StudentService(ApplicationContext context)
     {
-        private ApplicationContext _context;
-
-        public StudentService(ApplicationContext context)
-        {
-            _context = context;
-        }
+        private ApplicationContext _context = context;
 
         public List<Student> GetAllByCourse(int courseId)
         {

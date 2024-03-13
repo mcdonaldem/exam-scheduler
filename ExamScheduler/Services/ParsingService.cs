@@ -2,21 +2,15 @@
 using ExamScheduler.Entities.Enums;
 using ExamScheduler.Exceptions;
 using ExamScheduler.Extensions;
+using ExamScheduler.Models;
 
 namespace ExamScheduler.Services
 {
-    public class ParsingService
+    public class ParsingService(MentorService mentorService, StudentService studentService)
     {
-        private MentorService _mentorService;
-        private StudentService _studentService;
-        private char[] validDelimiters;
-
-        public ParsingService(MentorService mentorService, StudentService studentService)
-        {
-            _mentorService = mentorService;
-            validDelimiters = [',', ';', '|'];
-            _studentService = studentService;
-        }
+        private MentorService _mentorService = mentorService;
+        private StudentService _studentService = studentService;
+        private char[] validDelimiters = [',', ';', '|'];
 
         public List<MentorAvailability> GetMentorAvailabilities(IFormFile file)
         {

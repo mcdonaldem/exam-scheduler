@@ -4,14 +4,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ExamScheduler.Services
 {
-    public class MentorService
+    public class MentorService(ApplicationContext context)
     {
-        private ApplicationContext _context;
-
-        public MentorService(ApplicationContext context)
-        {
-            _context = context;
-        }
+        private ApplicationContext _context = context;
 
         public List<Mentor> GetAllActive()
         {

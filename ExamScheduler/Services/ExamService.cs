@@ -2,13 +2,8 @@
 
 namespace ExamScheduler.Services
 {
-    public class ExamService
+    public class ExamService(ApplicationContext context)
     {
-        private ApplicationContext _context;
-
-        public ExamService(ApplicationContext context)
-        {
-            _context = context;
-        }
+        private ApplicationContext _context = context;
     }
 }
