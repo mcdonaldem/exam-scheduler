@@ -52,6 +52,8 @@ namespace ExamScheduler.Services
         {
             var students = _studentService.GetAllByCourse(courseId);
 
+            var availableAlgoLangs = _mentorService.GetActiveAlgoLanguages();
+
             var content = file.ReadAsList();
 
             var output = new List<StudentExamDetail>();
@@ -65,7 +67,7 @@ namespace ExamScheduler.Services
                     output.Add(new StudentExamDetail
                     {
                         Student = student,
-                        AlgoLanguage = (AlgoLanguage)Enum.Parse(typeof(AlgoLanguage), data[1])
+                        AlgoLanguage = availableAlgoLangs.First(a => a.Name == data[1])
                     });
                 }
                 catch (Exception)
