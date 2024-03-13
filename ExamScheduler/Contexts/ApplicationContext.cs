@@ -44,13 +44,14 @@ namespace ExamScheduler.Contexts
                 .IsRequired()
                 ;
 
-            modelBuilder.Entity<Mentor>()
-                .ToTable("Mentors")
+            modelBuilder.Entity<Exam>()
+                .HasOne(e => e.Mentor)
+                .WithMany(s => s.Exams)
+                .IsRequired()
                 ;
 
             modelBuilder.Entity<Mentor>()
-                .HasMany(m => m.Exams)
-                .WithMany(e => e.Mentors)
+                .ToTable("Mentors")
                 ;
 
             modelBuilder.Entity<Mentor>()
