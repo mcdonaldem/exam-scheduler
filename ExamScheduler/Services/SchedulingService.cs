@@ -1,20 +1,21 @@
 ﻿using ExamScheduler.Contexts;
 using ExamScheduler.Entities;
-using ExamScheduler.Entities.Enums;
 using ExamScheduler.Exceptions;
 using ExamScheduler.Models;
+using ExamScheduler.Models.Enums;
 
 namespace ExamScheduler.Services
 {
-    public class SchedulingService(ApplicationContext context, ParsingService parsingService)
+    public class SchedulingService(ApplicationContext context, ParsingService parsingService, IConfiguration configuration)
     {
-        private ApplicationContext _context = context;
-        private ParsingService _parsingService = parsingService;
+        private ApplicationContext context = context;
+        private ParsingService parsingService = parsingService;
+        private IConfiguration configuration = configuration;
 
         public List<Exam> CreateSchedule(IFormFile mentorInfo, IFormFile studentInfo, int courseId)
         {
-            var mentorAvails = _parsingService.GetMentorAvailabilities(mentorInfo);
-            var studentDetails = _parsingService.GetStudentExamDetails(studentInfo, courseId);
+            var mentorAvails = parsingService.GetMentorAvailabilities(mentorInfo);
+            var studentDetails = parsingService.GetStudentExamDetails(studentInfo, courseId);
 
             CheckInputForSchedulingFeasability(mentorAvails, studentDetails);
 
@@ -33,17 +34,17 @@ namespace ExamScheduler.Services
                         Student = studentDetails[i].Student,
                         Mentor = mentorSlot.Mentor,
                         Start = start,
-                        End = start.Add(TimeSpan.Parse(Environment.GetEnvironmentVariable("EXAM_DURATION") ?? "2:00"))
+                        End = start.Add(TimeSpan.Parse(configuration["ExamDuration"] ?? "2:00"))
                     });
                     mentorAvails.Remove(mentorSlot);
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     throw new SchedulingException($"An error occured while scheduling exam for {studentDetails[i]?.Student?.Name}", e);
                 }
             }
-            _context.Exams.AddRange(exams);
-            _context.SaveChanges();
+            context.Exams.AddRange(exams);
+            context.SaveChanges();
 
             return exams;
         }
@@ -107,10 +108,10 @@ namespace ExamScheduler.Services
         }
 
         private TimeOnly GetStartTime(TimeSlot timeSlot) => timeSlot switch
-        { 
-            TimeSlot.Morning => TimeOnly.Parse(Environment.GetEnvironmentVariable("MORNING_START") ?? "09:30"),
-            TimeSlot.EarlyAfternoon => TimeOnly.Parse(Environment.GetEnvironmentVariable("EARLY_AFTERNOON_START") ?? "13:00"),
-            TimeSlot.LateAfternoon => TimeOnly.Parse(Environment.GetEnvironmentVariable("LATE_AFTERNOON_START") ?? "15:30"),
+        {
+            TimeSlot.Morning => TimeOnly.Parse(configuration["MorningStart"] ?? "09:30"),
+            TimeSlot.EarlyAfternoon => TimeOnly.Parse(configuration["EarlyAfternoonStart"] ?? "13:00"),
+            TimeSlot.LateAfternoon => TimeOnly.Parse(configuration["LateAfternoonStart"] ?? "15:30"),
             _ => throw new SchedulingException("No such time slot found.")
         };
     }

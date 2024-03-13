@@ -1,20 +1,20 @@
 ﻿using ExamScheduler.Entities;
-using ExamScheduler.Entities.Enums;
 using ExamScheduler.Exceptions;
 using ExamScheduler.Extensions;
 using ExamScheduler.Models;
+using ExamScheduler.Models.Enums;
 
 namespace ExamScheduler.Services
 {
     public class ParsingService(MentorService mentorService, StudentService studentService)
     {
-        private MentorService _mentorService = mentorService;
-        private StudentService _studentService = studentService;
+        private MentorService mentorService = mentorService;
+        private StudentService studentService = studentService;
         private char[] validDelimiters = [',', ';', '|'];
 
         public List<MentorAvailability> GetMentorAvailabilities(IFormFile file)
         {
-            var mentors = _mentorService.GetAllActive();
+            var mentors = mentorService.GetAllActive();
 
             var content = file.ReadAsList();
 
@@ -43,9 +43,9 @@ namespace ExamScheduler.Services
 
         public List<StudentExamDetail> GetStudentExamDetails(IFormFile file, int courseId)
         {
-            var students = _studentService.GetAllByCourse(courseId);
+            var students = studentService.GetAllByCourse(courseId);
 
-            var availableAlgoLangs = _mentorService.GetActiveAlgoLanguages();
+            var availableAlgoLangs = mentorService.GetActiveAlgoLanguages();
 
             var content = file.ReadAsList();
 

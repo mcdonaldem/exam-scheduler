@@ -6,11 +6,11 @@ namespace ExamScheduler.Services
 {
     public class MentorService(ApplicationContext context)
     {
-        private ApplicationContext _context = context;
+        private ApplicationContext context = context;
 
         public List<Mentor> GetAllActive()
         {
-            return _context.Mentors
+            return context.Mentors
                 .Include(m => m.AlgoLanguages)
                 .Where(m => m.IsActive)
                 .ToList()
@@ -19,7 +19,7 @@ namespace ExamScheduler.Services
 
         public List<AlgoLanguage> GetActiveAlgoLanguages()
         {
-            return _context.Mentors
+            return context.Mentors
                 .Include(m => m.AlgoLanguages)
                 .Where(m => m.IsActive)
                 .SelectMany(m => m.AlgoLanguages)

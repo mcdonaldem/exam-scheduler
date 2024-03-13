@@ -6,13 +6,13 @@ namespace ExamScheduler.Services
 {
     public class StudentService(ApplicationContext context)
     {
-        private ApplicationContext _context = context;
+        private ApplicationContext context = context;
 
         public List<Student> GetAllByCourse(int courseId)
         {
-            if(_context.Courses.Any(c => c.Id == courseId))
+            if(context.Courses.Any(c => c.Id == courseId))
             {
-                return _context.Enrollments
+                return context.Enrollments
                     .Include(e => e.Student)
                     .Where(e => e.CourseId == courseId)
                     .Select(e => e.Student)
