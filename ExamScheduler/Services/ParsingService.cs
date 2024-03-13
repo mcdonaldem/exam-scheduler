@@ -8,14 +8,12 @@ namespace ExamScheduler.Services
 {
     public class ParsingService
     {
-        private ApplicationContext _context;
         private MentorService _mentorService;
         private StudentService _studentService;
         private char[] validDelimiters;
 
-        public ParsingService(ApplicationContext context, MentorService mentorService, StudentService studentService)
+        public ParsingService(MentorService mentorService, StudentService studentService)
         {
-            _context = context;
             _mentorService = mentorService;
             validDelimiters = [',', ';', '|'];
             _studentService = studentService;
