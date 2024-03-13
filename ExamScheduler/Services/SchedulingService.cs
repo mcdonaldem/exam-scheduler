@@ -21,14 +21,22 @@ namespace ExamScheduler.Services
             var mentorAvails = _parsingService.GetMentorAvailabilities(mentorInfo);
             var studentDetails = _parsingService.GetStudentExamDetails(studentInfo, courseId);
 
+            CheckInputForSchedulingFeasability(mentorAvails, studentDetails);
+
+            studentDetails = SortStudentDetailsByPriority(studentDetails);
+            mentorAvails = SortMentorAvailability(mentorAvails);
+        }
+
+        private void CheckInputForSchedulingFeasability(List<MentorAvailability> mentorAvails, 
+            List<StudentExamDetail> studentDetails)
+        {
             // Determine if there are enough slots in general
-            if(mentorAvails.Count < studentDetails.Count)
+            if (mentorAvails.Count < studentDetails.Count)
             {
                 throw new SchedulingException("Not enough exam slots to cover all students.");
             }
 
             //Determine if there are theoretically enough slots to cover each language
-            #region
             var maxSlotsPerLang = studentDetails
                 .Select(s => s.AlgoLanguage)
                 .Distinct()
@@ -47,22 +55,37 @@ namespace ExamScheduler.Services
                     uncovered.Add(kvp.Key);
                 }
             }
-            if(uncovered.Count > 0)
+            if (uncovered.Count > 0)
             {
                 throw new SchedulingException($"Not enough mentor availability to cover {String.Join(", ", uncovered.Select(u => u.Name))} exams.");
             }
-            #endregion
+        }
 
-            // Create student details list sorted by priority
+        private List<StudentExamDetail> SortStudentDetailsByPriority(List<StudentExamDetail> studentDetails)
+        {
             // Priority is given to a language with a lesser number of students
-            var sortedStudentDetails = studentDetails
-                .OrderBy(sd => studentLangCounts[sd.AlgoLanguage])
-                .ThenBy(sd => sd.Student.Name)
+            var studentLangCounts = studentDetails
+                .GroupBy(s => s.AlgoLanguage)
+                .ToDictionary(s => s.Key, s => s.Count())
+                ;
+
+            return studentDetails
+                .OrderBy(s => studentLangCounts[s.AlgoLanguage])
+                .ThenBy(s => s.Student.Name)
                 .ToList()
                 ;
         }
 
-        public TimeOnly GetStartTime(TimeSlot timeSlot) => timeSlot switch
+        private List<MentorAvailability> SortMentorAvailability(List<MentorAvailability> mentorAvails)
+        {
+            return mentorAvails
+                .OrderBy(m => m.Date)
+                .ThenBy(m => m.TimeSlot)
+                .ToList()
+                ;
+        }
+
+        private TimeOnly GetStartTime(TimeSlot timeSlot) => timeSlot switch
         {
             TimeSlot.Morning => TimeOnly.Parse(Environment.GetEnvironmentVariable("MORNING_START")),
             TimeSlot.EarlyAfternoon => TimeOnly.Parse(Environment.GetEnvironmentVariable("EARLY_AFTERNOON_START")),
