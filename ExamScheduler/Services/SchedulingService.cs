@@ -29,13 +29,9 @@ namespace ExamScheduler.Services
 
             //Determine if there are theoretically enough slots to cover each language
             #region
-            var requestedLangs = studentDetails
+            var maxSlotsPerLang = studentDetails
                 .Select(s => s.AlgoLanguage)
                 .Distinct()
-                .ToList()
-                ;
-
-            var maxSlotsPerLang = requestedLangs
                 .ToDictionary(r => r, r => mentorAvails.Count(m => m.Mentor.AlgoLanguages.Contains(r)));
 
             var studentLangCounts = studentDetails
@@ -56,6 +52,14 @@ namespace ExamScheduler.Services
                 throw new SchedulingException($"Not enough mentor availability to cover {String.Join(", ", uncovered.Select(u => u.Name))} exams.");
             }
             #endregion
+
+            // Create student details list sorted by priority
+            // Priority is given to a language with a lesser number of students
+            var sortedStudentDetails = studentDetails
+                .OrderBy(sd => studentLangCounts[sd.AlgoLanguage])
+                .ThenBy(sd => sd.Student.Name)
+                .ToList()
+                ;
         }
 
         public TimeOnly GetStartTime(TimeSlot timeSlot) => timeSlot switch
