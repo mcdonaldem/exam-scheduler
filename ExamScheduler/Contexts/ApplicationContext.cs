@@ -39,9 +39,11 @@ namespace ExamScheduler.Contexts
                 .IsRequired()
                 ;
 
+
             modelBuilder.Entity<Exam>()
                  .HasOne(e => e.StudentDetail)
-                 .WithOne(sd => sd.Exam)
+                 .WithOne()
+                 .HasForeignKey<Exam>(e => e.StudentDetailId)
                  .IsRequired()
                  ;
 

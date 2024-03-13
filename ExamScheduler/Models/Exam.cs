@@ -5,6 +5,7 @@ namespace ExamScheduler.Models
     public class Exam
     {
         public int Id { get; set; }
+        public int StudentDetailId { get; set; }
         public StudentExamDetail StudentDetail { get; set; }
         public List<Mentor> Mentors { get; set; }
         public DateTime Start { get; set; }
