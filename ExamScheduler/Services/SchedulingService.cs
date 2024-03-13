@@ -14,6 +14,8 @@ namespace ExamScheduler.Services
             _parsingService = parsubgService;
         }
 
+
+
         public TimeOnly GetStartTime(TimeSlot timeSlot) => timeSlot switch
         {
             TimeSlot.Morning => TimeOnly.Parse(Environment.GetEnvironmentVariable("MORNING_START")),

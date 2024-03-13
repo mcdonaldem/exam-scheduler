@@ -54,6 +54,11 @@ namespace ExamScheduler.Contexts
                 .WithMany(e => e.Mentors)
                 ;
 
+            modelBuilder.Entity<Mentor>()
+                .HasMany(m => m.AlgoLanguages)
+                .WithMany()
+                ;
+
             modelBuilder.Entity<MentorAvailability>()
                 .HasOne(ma => ma.Mentor)
                 .WithMany()
@@ -73,6 +78,12 @@ namespace ExamScheduler.Contexts
             modelBuilder.Entity<Student>()
                 .HasMany(s => s.ExamDetails)
                 .WithOne(e => e.Student)
+                .IsRequired()
+                ;
+
+            modelBuilder.Entity<StudentExamDetail>()
+                .HasOne(s => s.AlgoLanguage)
+                .WithMany()
                 .IsRequired()
                 ;
         }
