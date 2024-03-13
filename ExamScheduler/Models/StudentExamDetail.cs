@@ -1,6 +1,4 @@
-﻿using ExamScheduler.Models.Enums;
-
-namespace ExamScheduler.Models
+﻿namespace ExamScheduler.Models
 {
     public class StudentExamDetail
     {
