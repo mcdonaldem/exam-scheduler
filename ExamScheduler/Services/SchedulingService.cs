@@ -39,7 +39,7 @@ namespace ExamScheduler.Services
                     });
                     mentorAvails.Remove(mentorSlot);
                 }
-                catch (Exception e)
+                catch (Exception e) when (e is not StackOverflowException && e is not OutOfMemoryException)
                 {
                     throw new SchedulingException($"An error occured while scheduling exam for {studentDetails[i]?.Student?.Name}", e);
                 }

@@ -64,7 +64,7 @@ namespace ExamScheduler.Services
                         AlgoLanguage = availableAlgoLangs.First(a => a.Name == data[1])
                     });
                 }
-                catch (Exception)
+                catch (Exception e) when (e is not StackOverflowException && e is not OutOfMemoryException)
                 {
                     throw new InvalidFileDataException("Invalid algo language.");
                 }
