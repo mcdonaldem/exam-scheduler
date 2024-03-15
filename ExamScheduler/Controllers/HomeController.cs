@@ -6,7 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ExamScheduler.Controllers
 {
-    public class HomeController(IOutputSerializerService outputSerializerService, ISchedulingService schedulingService, IConfiguration configuration) : Controller
+    public class HomeController(IOutputSerializerService outputSerializerService, ISchedulingService schedulingService, 
+        IConfiguration configuration) : Controller
     {
         private IOutputSerializerService outputSerializerService = outputSerializerService;
         private ISchedulingService schedulingService = schedulingService;
@@ -19,7 +20,7 @@ namespace ExamScheduler.Controllers
 
             try
             {
-                Func<List<Exam>, dynamic> output = (OutputSerialzation)int.Parse(configuration["OutputSerialization"]) switch
+                Func<List<Exam>, dynamic> output = (OutputSerialzation)int.Parse(configuration["OutputSerialization"]!) switch
                 {
                     OutputSerialzation.ByteArray => outputSerializerService.ToByteArray,
                     OutputSerialzation.Stream => outputSerializerService.ToStream,
@@ -27,7 +28,7 @@ namespace ExamScheduler.Controllers
                 };
                 return File(output(content), "text/csv", "scheduled_exams.csv");
             }
-            catch (Exception e)
+            catch (Exception e) when (e is not StackOverflowException && e is not OutOfMemoryException)
             {
                 throw new ConfigurationException("Output serialization type not configured.", e);
             }
