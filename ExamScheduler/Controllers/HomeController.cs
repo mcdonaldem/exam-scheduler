@@ -16,21 +16,28 @@ namespace ExamScheduler.Controllers
         [HttpGet("/schedule")]
         public IActionResult GetFile(IFormFile mentorInfo, IFormFile studentInfo, int courseId)
         {
-            var content = schedulingService.CreateSchedule(mentorInfo, studentInfo, courseId);
+            if(mentorInfo != null && studentInfo != null)
+            {
+                var content = schedulingService.CreateSchedule(mentorInfo, studentInfo, courseId);
 
-            try
-            {
-                Func<List<Exam>, dynamic> output = (OutputSerialzation)int.Parse(configuration["OutputSerialization"]!) switch
+                try
                 {
-                    OutputSerialzation.ByteArray => outputSerializerService.ToByteArray,
-                    OutputSerialzation.Stream => outputSerializerService.ToStream,
-                    _ => throw new ConfigurationException("Output serialization type not recognized.")
-                };
-                return File(output(content), "text/csv", "scheduled_exams.csv");
+                    Func<List<Exam>, dynamic> output = (OutputSerialzation)int.Parse(configuration["OutputSerialization"]!) switch
+                    {
+                        OutputSerialzation.ByteArray => outputSerializerService.ToByteArray,
+                        OutputSerialzation.Stream => outputSerializerService.ToStream,
+                        _ => throw new ConfigurationException("Output serialization type not recognized.")
+                    };
+                    return File(output(content), "text/csv", "scheduled_exams.csv");
+                }
+                catch (Exception e) when (e is not StackOverflowException && e is not OutOfMemoryException)
+                {
+                    throw new ConfigurationException("Output serialization type not configured.", e);
+                }
             }
-            catch (Exception e) when (e is not StackOverflowException && e is not OutOfMemoryException)
+            else
             {
-                throw new ConfigurationException("Output serialization type not configured.", e);
+                throw new ArgumentException("File info not provided.");
             }
         }
     }

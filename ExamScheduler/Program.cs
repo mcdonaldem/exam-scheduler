@@ -38,7 +38,7 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-//app.UseStatusCodePages();
+app.UseStatusCodePages();
 app.UseHttpsRedirection();
 app.MapControllers();
 
