@@ -30,9 +30,9 @@ if (app.Environment.IsDevelopment())
             context.Response.StatusCode = StatusCodes.Status500InternalServerError;
             context.Response.ContentType = Text.Plain;
             var exceptionHandlerPathFeature = context.Features.Get<IExceptionHandlerPathFeature>();
-            await context.Response.WriteAsync($"Exception thrown: {exceptionHandlerPathFeature.Error.GetType().Name}" +
+            await context.Response.WriteAsync($"Exception thrown: {exceptionHandlerPathFeature?.Error?.GetType()?.Name}" +
                 $"{Environment.NewLine}" +
-                $"Stack trace: {exceptionHandlerPathFeature.Error.StackTrace}"
+                $"Stack trace: {exceptionHandlerPathFeature?.Error?.StackTrace}"
                 );
         });
     });
