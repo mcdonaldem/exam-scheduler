@@ -2,6 +2,8 @@ using Microsoft.EntityFrameworkCore;
 using ExamScheduler.Contexts;
 using ExamScheduler.Services.Interfaces;
 using ExamScheduler.Services;
+using Microsoft.AspNetCore.Diagnostics;
+using static System.Net.Mime.MediaTypeNames;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +21,25 @@ if (builder.Environment.IsDevelopment())
 
 var app = builder.Build();
 
-app.MapGet("/", () => "Hello World!");
+if (app.Environment.IsDevelopment())
+{
+    app.UseExceptionHandler(exceptionHandlerApp =>
+    {
+        exceptionHandlerApp.Run(async context =>
+        {
+            context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+            context.Response.ContentType = Text.Plain;
+            var exceptionHandlerPathFeature = context.Features.Get<IExceptionHandlerPathFeature>();
+            await context.Response.WriteAsync($"Exception thrown: {exceptionHandlerPathFeature.Error.GetType().Name}" +
+                $"{Environment.NewLine}" +
+                $"Stack trace: {exceptionHandlerPathFeature.Error.StackTrace}"
+                );
+        });
+    });
+}
+
+app.UseStatusCodePages();
+app.UseHttpsRedirection();
+app.MapControllers();
 
 app.Run();
