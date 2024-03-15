@@ -14,6 +14,8 @@ builder.Services.AddScoped<IParsingService, ParsingService>();
 builder.Services.AddScoped<ISchedulingService, SchedulingService>();
 builder.Services.AddScoped<IStudentService, StudentService>();
 
+builder.Services.AddControllersWithViews();
+
 if (builder.Environment.IsDevelopment())
 {
     builder.Services.AddDbContext<ApplicationContext>(
@@ -36,7 +38,7 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-app.UseStatusCodePages();
+//app.UseStatusCodePages();
 app.UseHttpsRedirection();
 app.MapControllers();
 
