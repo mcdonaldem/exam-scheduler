@@ -1,10 +1,11 @@
 ﻿using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using ExamScheduler.Entities;
+using ExamScheduler.Services.Interfaces;
 
 namespace ExamScheduler.Services
 {
-    public class OutputSerializerService
+    public class OutputSerializerService : IOutputSerializerService
     {
         public byte[] ToByteArray(List<Exam> exams)
         {

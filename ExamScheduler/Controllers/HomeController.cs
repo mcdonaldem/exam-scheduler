@@ -1,15 +1,15 @@
 ﻿using ExamScheduler.Entities;
 using ExamScheduler.Exceptions;
 using ExamScheduler.Models.Enums;
-using ExamScheduler.Services;
+using ExamScheduler.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ExamScheduler.Controllers
 {
-    public class HomeController(OutputSerializerService outputSerializerService, SchedulingService schedulingService, IConfiguration configuration) : Controller
+    public class HomeController(IOutputSerializerService outputSerializerService, ISchedulingService schedulingService, IConfiguration configuration) : Controller
     {
-        private OutputSerializerService outputSerializerService = outputSerializerService;
-        private SchedulingService schedulingService = schedulingService;
+        private IOutputSerializerService outputSerializerService = outputSerializerService;
+        private ISchedulingService schedulingService = schedulingService;
         private IConfiguration configuration = configuration;
 
         [HttpGet("/schedule")]

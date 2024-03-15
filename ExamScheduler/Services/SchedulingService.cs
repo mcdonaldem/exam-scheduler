@@ -3,13 +3,14 @@ using ExamScheduler.Entities;
 using ExamScheduler.Exceptions;
 using ExamScheduler.Models;
 using ExamScheduler.Models.Enums;
+using ExamScheduler.Services.Interfaces;
 
 namespace ExamScheduler.Services
 {
-    public class SchedulingService(ApplicationContext context, ParsingService parsingService, IConfiguration configuration)
+    public class SchedulingService(ApplicationContext context, IParsingService parsingService, IConfiguration configuration) : ISchedulingService
     {
         private ApplicationContext context = context;
-        private ParsingService parsingService = parsingService;
+        private IParsingService parsingService = parsingService;
         private IConfiguration configuration = configuration;
 
         public List<Exam> CreateSchedule(IFormFile mentorInfo, IFormFile studentInfo, int courseId)

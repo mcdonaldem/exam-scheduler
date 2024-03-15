@@ -1,10 +1,11 @@
 ﻿using ExamScheduler.Contexts;
 using ExamScheduler.Entities;
+using ExamScheduler.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace ExamScheduler.Services
 {
-    public class MentorService(ApplicationContext context)
+    public class MentorService(ApplicationContext context) : IMentorService
     {
         private ApplicationContext context = context;
 

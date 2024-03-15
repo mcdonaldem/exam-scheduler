@@ -3,13 +3,14 @@ using ExamScheduler.Exceptions;
 using ExamScheduler.Extensions;
 using ExamScheduler.Models;
 using ExamScheduler.Models.Enums;
+using ExamScheduler.Services.Interfaces;
 
 namespace ExamScheduler.Services
 {
-    public class ParsingService(MentorService mentorService, StudentService studentService)
+    public class ParsingService(IMentorService mentorService, IStudentService studentService) : IParsingService
     {
-        private MentorService mentorService = mentorService;
-        private StudentService studentService = studentService;
+        private IMentorService mentorService = mentorService;
+        private IStudentService studentService = studentService;
         private char[] validDelimiters = [',', ';', '|'];
 
         public List<MentorAvailability> GetMentorAvailabilities(IFormFile file)
