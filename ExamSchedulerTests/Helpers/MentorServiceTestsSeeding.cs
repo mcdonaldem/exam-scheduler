@@ -3,7 +3,7 @@ using ExamScheduler.Entities;
 
 namespace ExamSchedulerTests.Helpers
 {
-    public static class MentorTestsSeeding
+    public static class MentorServiceTestsSeeding
     {
         public static ApplicationContext Seed(ApplicationContext context)
         {

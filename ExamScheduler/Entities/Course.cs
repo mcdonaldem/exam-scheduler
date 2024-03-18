@@ -14,5 +14,10 @@
             Enrollments = [];
             Mentors = [];
         }
+
+        public Course(string name)
+        {
+            Name = name;
+        }
     }
 }

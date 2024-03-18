@@ -10,5 +10,11 @@
             Enrollments = [];
             Exams = [];
         }
+
+        public Student(string name) : base(name)
+        {
+            Enrollments = [];
+            Exams = [];
+        }
     }
 }

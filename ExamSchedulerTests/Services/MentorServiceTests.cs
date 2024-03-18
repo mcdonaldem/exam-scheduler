@@ -19,7 +19,7 @@ namespace ExamSchedulerTests.Services
         public MentorServiceTests()
         {
             context = GetSqliteDbContext();
-            MentorTestsSeeding.Seed(context);
+            MentorServiceTestsSeeding.Seed(context);
             service = new MentorService(context);
         }
 
