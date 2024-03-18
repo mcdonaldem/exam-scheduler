@@ -23,14 +23,19 @@ namespace ExamSchedulerTests.Services
             service = new StudentService(context);
         }
 
-        [Fact]
-        public async Task GetAllByCourse_ValidId_PopulatedDb_ReturnsOK()
+        [Theory]
+        [InlineData(IdValue.Max)]
+        [InlineData(IdValue.Min)]
+        [InlineData((IdValue)4)]
+        public async Task GetAllByCourse_ValidId_PopulatedDb_ReturnsOK(IdValue courseIdSelect)
         {
             // Arrange
-            var courseId = context.Courses
-                .Select(c => c.Id)
-                .Min()
-                ;
+            var courseId = courseIdSelect switch
+            {
+                IdValue.Max => context.Courses.Select(c => c.Id).Max(),
+                IdValue.Min => context.Courses.Select(c => c.Id).Min(),
+                _ => context.Courses.Select(c => c.Id).FirstOrDefault()
+            };
 
             // Act
             var students = service.GetAllByCourse(courseId);
@@ -72,6 +77,12 @@ namespace ExamSchedulerTests.Services
         {
             context.Students.ExecuteDelete();
             context.SaveChanges();
+        }
+
+        public enum IdValue
+        {
+            Max,
+            Min
         }
     }
 }
