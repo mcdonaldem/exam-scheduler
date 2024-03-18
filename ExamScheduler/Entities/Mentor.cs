@@ -11,6 +11,23 @@
         {
             Courses = [];
             Exams = [];
+            AlgoLanguages = [];
+        }
+
+        public Mentor(string name) : base(name)
+        {
+            IsActive = true;
+            Courses = [];
+            Exams = [];
+            AlgoLanguages = [];
+        }
+
+        public Mentor(string name, bool isActive) : base(name)
+        {
+            IsActive = isActive;
+            Courses = [];
+            Exams = [];
+            AlgoLanguages = [];
         }
     }
 }

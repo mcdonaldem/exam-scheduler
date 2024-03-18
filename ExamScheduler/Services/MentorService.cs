@@ -12,7 +12,7 @@ namespace ExamScheduler.Services
         public List<Mentor> GetAllActive()
         {
             return context.Mentors
-                .Include(m => m.AlgoLanguages)
+                //.Include(m => m.AlgoLanguages)
                 .Where(m => m.IsActive)
                 .ToList()
                 ;
