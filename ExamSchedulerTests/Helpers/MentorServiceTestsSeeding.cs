@@ -7,6 +7,13 @@ namespace ExamSchedulerTests.Helpers
     {
         public static ApplicationContext Seed(ApplicationContext context)
         {
+            SeedAlgoLanguages(context);
+            SeedMentors(context);
+            return context;
+        }
+
+        private static ApplicationContext SeedAlgoLanguages(ApplicationContext context)
+        {
             // Seed algo languages
             List<AlgoLanguage> algoLangs = [
                 new AlgoLanguage("Java"),
@@ -19,7 +26,11 @@ namespace ExamSchedulerTests.Helpers
                 .AddRange(algoLangs)
                 ;
             context.SaveChanges();
+            return context;
+        }
 
+        private static ApplicationContext SeedMentors(ApplicationContext context)
+        {
             var langs = context.AlgoLanguages
                 .ToList()
                 ;
@@ -36,7 +47,7 @@ namespace ExamSchedulerTests.Helpers
                 new Mentor("Hanna", true)
             ];
 
-            foreach(var m in mentors)
+            foreach (var m in mentors)
             {
                 var knownLangs = new Random().Next(1, langs.Count + 1);
                 var indices = Enumerable

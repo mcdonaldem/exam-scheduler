@@ -12,6 +12,14 @@ namespace ExamSchedulerTests.Helpers
     {
         public static ApplicationContext Seed(ApplicationContext context)
         {
+            SeedCourses(context);
+            SeedStudents(context);
+            SeedEnrollments(context);
+            return context;
+        }
+
+        private static ApplicationContext SeedCourses(ApplicationContext context)
+        {
             List<Course> coursesToSave = [
                 new Course("Winter 2023"),
                 new Course("Spring 2024"),
@@ -20,7 +28,12 @@ namespace ExamSchedulerTests.Helpers
             ];
 
             context.Courses.AddRange(coursesToSave);
+            context.SaveChanges();
+            return context;
+        }
 
+        private static ApplicationContext SeedStudents(ApplicationContext context)
+        {
             List<Student> studentsToSave = [
                 new Student("Noah Nordstrom"),
                 new Student("Albin Latos"),
@@ -51,26 +64,28 @@ namespace ExamSchedulerTests.Helpers
 
             context.Students.AddRange(studentsToSave);
             context.SaveChanges();
+            return context;
+        }
 
+        private static ApplicationContext SeedEnrollments(ApplicationContext context)
+        {
             var courses = context.Courses
-                .ToList()
+                .ToArray()
                 ;
 
             var students = context.Students
-                .ToList()
+                .ToArray()
                 ;
 
             List<Enrollment> enrollments = [];
-
             foreach (var s in students)
             {
                 enrollments.Add(new Enrollment
                 {
                     Student = s,
-                    Course = courses[new Random().Next(courses.Count)]
+                    Course = courses[new Random().Next(courses.Length)]
                 });
             }
-
             context.Enrollments.AddRange(enrollments);
             context.SaveChanges();
             return context;

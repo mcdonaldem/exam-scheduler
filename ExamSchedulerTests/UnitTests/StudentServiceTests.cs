@@ -27,15 +27,10 @@ namespace ExamSchedulerTests.Services
         [InlineData(IdValue.Max)]
         [InlineData(IdValue.Min)]
         [InlineData((IdValue)4)]
-        public async Task GetAllByCourse_ValidId_PopulatedDb_ReturnsOK(IdValue courseIdSelect)
+        public async Task GetAllByCourse_ValidId_PopulatedDb_ReturnsOK(IdValue id)
         {
             // Arrange
-            var courseId = courseIdSelect switch
-            {
-                IdValue.Max => context.Courses.Select(c => c.Id).Max(),
-                IdValue.Min => context.Courses.Select(c => c.Id).Min(),
-                _ => context.Courses.Select(c => c.Id).FirstOrDefault()
-            };
+            var courseId = GetCourseId(id);
 
             // Act
             var students = service.GetAllByCourse(courseId);
@@ -56,15 +51,15 @@ namespace ExamSchedulerTests.Services
             Assert.Equal("Invalid course id.", result.Message);
         }
 
-        [Fact]
-        public async Task GetAllByCourse_ValidId_EmptyStudentsTable_ReturnsOK()
+        [Theory]
+        [InlineData(IdValue.Max)]
+        [InlineData(IdValue.Min)]
+        [InlineData((IdValue)4)]
+        public async Task GetAllByCourse_ValidId_EmptyStudentsTable_ReturnsOK(IdValue id)
         {
             // Arrange
             RemoveStudents();
-            var courseId = context.Courses
-                .Select(c => c.Id)
-                .Min()
-                ;
+            var courseId = GetCourseId(id);
 
             // Act
             var students = service.GetAllByCourse(courseId);
@@ -72,6 +67,13 @@ namespace ExamSchedulerTests.Services
             // Assert
             Assert.Empty(students);
         }
+
+        private int GetCourseId(IdValue courseId) => courseId switch
+        {
+            IdValue.Max => context.Courses.Select(c => c.Id).Max(),
+            IdValue.Min => context.Courses.Select(c => c.Id).Min(),
+            _ => context.Courses.Select(c => c.Id).FirstOrDefault()
+        };
 
         private void RemoveStudents()
         {
