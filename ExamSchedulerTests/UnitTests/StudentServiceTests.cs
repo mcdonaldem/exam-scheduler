@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ExamScheduler.Contexts;
+﻿using ExamScheduler.Contexts;
 using ExamScheduler.Services;
-using ExamSchedulerTests.Helpers;
 using ExamSchedulerTests.TestSetup;
 using Microsoft.EntityFrameworkCore;
+using static ExamSchedulerTests.Helpers.StudentServiceTestsSeeding;
 
 namespace ExamSchedulerTests.Services
 {
@@ -19,7 +14,7 @@ namespace ExamSchedulerTests.Services
         public StudentServiceTests()
         {
             context = GetSqliteDbContext();
-            StudentServiceTestsSeeding.Seed(context);
+            Seed(context);
             service = new StudentService(context);
         }
 
