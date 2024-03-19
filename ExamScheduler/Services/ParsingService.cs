@@ -1,4 +1,5 @@
-﻿using ExamScheduler.Entities;
+﻿using System.Text;
+using ExamScheduler.Entities;
 using ExamScheduler.Exceptions;
 using ExamScheduler.Extensions;
 using ExamScheduler.Models;
@@ -15,12 +16,12 @@ namespace ExamScheduler.Services
 
         public List<MentorAvailability> GetMentorAvailabilities(IFormFile file)
         {
+            string[] content = ValidateFile(file);
+
             var mentors = mentorService.GetAllActive();
 
-            var content = file.ReadAsList();
-
             var output = new List<MentorAvailability>();
-            for (int i = 0; i < content.Count; i++)
+            for (int i = 0; i < content.Length; i++)
             {
                 var data = ValidateData(content[i], i, 3);
                 var mentor = (Mentor)ValidatePerson(mentors, data[0]);
@@ -44,14 +45,14 @@ namespace ExamScheduler.Services
 
         public List<StudentExamDetail> GetStudentExamDetails(IFormFile file, int courseId)
         {
+            var content = ValidateFile(file);
+
             var students = studentService.GetAllByCourse(courseId);
 
             var availableAlgoLangs = mentorService.GetActiveAlgoLanguages();
 
-            var content = file.ReadAsList();
-
             var output = new List<StudentExamDetail>();
-            for (int i = 0; i < content.Count; i++)
+            for (int i = 0; i < content.Length; i++)
             {
                 var data = ValidateData(content[i], i, 2);
                 var student = (Student)ValidatePerson(students, data[0]);
@@ -90,6 +91,32 @@ namespace ExamScheduler.Services
                 throw new InvalidFileDataException($"{people?.GetType()?.GetGenericArguments()?.FirstOrDefault()?.Name} with name \"{name}\" not found.");
             }
             return person;
+        }
+
+        private string[] ValidateFile(IFormFile file, ContentCategory contentCategory)
+        {
+            if(file == null)
+            {
+                throw new SchedulingException("No file provided.");
+            }
+            else if(file.ContentType != "text/csv")
+            {
+                throw new SchedulingException("Incorrect file type provided.");
+            }
+            else if(file.Length > 0)
+            {
+                throw new SchedulingException("Provided file is empty.");
+            }
+            else
+            {
+                return file.ReadAsArray();
+            }
+        }
+
+        public enum ContentCategory
+        {
+            Mentor,
+            Student
         }
     }
 }

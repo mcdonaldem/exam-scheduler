@@ -2,17 +2,16 @@
 {
     public static class IFormFileExtensions
     {
-        public static List<string> ReadAsList(this IFormFile file)
+        public static string[] ReadAsArray(this IFormFile file)
         {
-            var content = new List<string>();
-            using (var reader = new StreamReader(file.OpenReadStream()))
+            using (var fileStream = file.OpenReadStream())
             {
-                while (reader.Peek() > -1)
-                {
-                    content.Add(reader.ReadLine());
-                }
+                var bytes = new byte[file.Length];
+                fileStream.Read(bytes, 0, (int)file.Length);
+                return Convert.ToBase64String(bytes)
+                    .Split(["\r\n", "\n"], StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+                    ;
             }
-            return content;
         }
     }
 }
