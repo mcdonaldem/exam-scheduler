@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ExamSchedulerTests.Helpers
+namespace ExamScheduler.Tests.Helpers
 {
     public class SchedulingServiceTestsConfig
     {

@@ -3,7 +3,7 @@ using ExamScheduler.Contexts;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 
-namespace ExamSchedulerTests.TestSetup
+namespace ExamScheduler.Tests.TestSetup
 {
     public class TestsBase : IDisposable
     {

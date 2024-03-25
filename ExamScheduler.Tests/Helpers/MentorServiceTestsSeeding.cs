@@ -1,7 +1,7 @@
 ﻿using ExamScheduler.Contexts;
 using ExamScheduler.Entities;
 
-namespace ExamSchedulerTests.Helpers
+namespace ExamScheduler.Tests.Helpers
 {
     public static class MentorServiceTestsSeeding
     {

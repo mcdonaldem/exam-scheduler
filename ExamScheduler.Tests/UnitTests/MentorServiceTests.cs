@@ -1,9 +1,9 @@
 ﻿using ExamScheduler.Contexts;
 using ExamScheduler.Services;
-using ExamSchedulerTests.TestSetup;
-using static ExamSchedulerTests.Helpers.MentorServiceTestsSeeding;
+using ExamScheduler.Tests.TestSetup;
+using static ExamScheduler.Tests.Helpers.MentorServiceTestsSeeding;
 
-namespace ExamSchedulerTests.Services
+namespace ExamScheduler.Tests.Services
 {
     public class MentorServiceTests : TestsBase
     {

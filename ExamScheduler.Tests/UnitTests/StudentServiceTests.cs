@@ -1,10 +1,10 @@
 ﻿using ExamScheduler.Contexts;
 using ExamScheduler.Services;
-using ExamSchedulerTests.TestSetup;
+using ExamScheduler.Tests.TestSetup;
 using Microsoft.EntityFrameworkCore;
-using static ExamSchedulerTests.Helpers.StudentServiceTestsSeeding;
+using static ExamScheduler.Tests.Helpers.StudentServiceTestsSeeding;
 
-namespace ExamSchedulerTests.Services
+namespace ExamScheduler.Tests.Services
 {
     public class StudentServiceTests : TestsBase
     {

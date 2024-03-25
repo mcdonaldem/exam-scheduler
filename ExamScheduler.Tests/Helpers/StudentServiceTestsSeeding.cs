@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using ExamScheduler.Contexts;
 using ExamScheduler.Entities;
 
-namespace ExamSchedulerTests.Helpers
+namespace ExamScheduler.Tests.Helpers
 {
     public class StudentServiceTestsSeeding
     {

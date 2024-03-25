@@ -1,13 +1,13 @@
 using ExamScheduler.Contexts;
 using ExamScheduler.Services;
 using ExamScheduler.Services.Interfaces;
-using ExamSchedulerTests.TestSetup;
+using ExamScheduler.Tests.TestSetup;
 using Microsoft.Extensions.Configuration;
 using Moq;
-using static ExamSchedulerTests.Helpers.SchedulingServiceTestsConfig;
-using static ExamSchedulerTests.Helpers.SchedulingServiceTestsSeeding;
+using static ExamScheduler.Tests.Helpers.SchedulingServiceTestsConfig;
+using static ExamScheduler.Tests.Helpers.SchedulingServiceTestsSeeding;
 
-namespace ExamSchedulerTests.Services
+namespace ExamScheduler.Tests.Services
 {
     public class SchedulingServiceTests : TestsBase
     {

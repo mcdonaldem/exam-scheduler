@@ -8,7 +8,7 @@ using ExamScheduler.Services.Interfaces;
 using ExamScheduler.Services;
 using Moq;
 
-namespace ExamSchedulerTests.Services
+namespace ExamScheduler.Tests.Services
 {
     public class ParsingServiceTests
     {
