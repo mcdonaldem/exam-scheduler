@@ -1,4 +1,6 @@
 ﻿using System;
+using System.CodeDom.Compiler;
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
@@ -6,6 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ExamScheduler.Migrations
 {
     /// <inheritdoc />
+    [ExcludeFromCodeCoverage]
     public partial class initial : Migration
     {
         /// <inheritdoc />
