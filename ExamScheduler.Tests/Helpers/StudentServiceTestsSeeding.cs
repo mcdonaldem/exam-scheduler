@@ -22,9 +22,7 @@ namespace ExamScheduler.Tests.Helpers
         {
             List<Course> coursesToSave = [
                 new Course("Winter 2023"),
-                new Course("Spring 2024"),
-                new Course("Fall 2024"),
-                new Course("Winter 2024")
+                new Course("Spring 2024")
             ];
 
             context.Courses.AddRange(coursesToSave);

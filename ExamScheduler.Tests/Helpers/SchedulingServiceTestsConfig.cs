@@ -8,6 +8,7 @@ using ExamScheduler.Entities;
 using ExamScheduler.Exceptions;
 using ExamScheduler.Models;
 using ExamScheduler.Models.Enums;
+using ExamScheduler.Tests.Exceptions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
@@ -30,9 +31,12 @@ namespace ExamScheduler.Tests.Helpers
         {
             var mentors = context
                 .Mentors
+                .Include(m => m.AlgoLanguages)
                 .Where(m => m.IsActive)
                 .ToArray()
                 ;
+
+            var maxSlots = mentors.Length * Enum.GetValues(typeof(TimeSlot)).Length * 5;
 
             var course = context
                 .Courses
@@ -41,7 +45,7 @@ namespace ExamScheduler.Tests.Helpers
 
             if (course == null)
             {
-                throw new ArgumentException($"Provided course id (value = {courseId}) does not exist.");
+                throw new TestConfigException($"Provided course id (value = {courseId}) does not exist.");
             }
 
             var students = context
@@ -54,11 +58,11 @@ namespace ExamScheduler.Tests.Helpers
 
             if (students.Length == 0)
             {
-                throw new Exception("No students found in context.");
+                throw new TestConfigException("No students found in context.");
             }
-            if (students.Length / (Enum.GetValues(typeof(TimeSlot)).Length * 5d) > mentors.Length)
+            if (students.Length > maxSlots - 1)
             {
-                throw new Exception("Not enough mentors in context to provide realistic test input.");
+                throw new TestConfigException("Not enough mentors in context to provide realistic test input.");
             }
 
             var output = new List<MentorAvailability>();
@@ -67,15 +71,16 @@ namespace ExamScheduler.Tests.Helpers
                 .AddDays((7 + DayOfWeek.Monday - DateTime.Now.DayOfWeek) % 7)
                 ;
 
-            for (int i = 0; i < students.Length; i++)
+            var random = new Random();
+            for (int i = 0; i < maxSlots; i++)
             {
-                var randMentor = mentors[new Random().Next(mentors.Length)];
+                var randMentor = mentors[random.Next(mentors.Length)];
                 var date = DateOnly.FromDateTime(examWeekMonday.AddDays(i % 5));
                 var timeSlot = (TimeSlot)((i / 5) % 3);
 
                 while (output.Any(ma => ma.Mentor == randMentor && ma.Date == date && ma.TimeSlot == timeSlot))
                 {
-                    randMentor = mentors[new Random().Next(mentors.Length)];
+                    randMentor = mentors[random.Next(mentors.Length)];
                 }
 
                 output.Add(new MentorAvailability
@@ -97,7 +102,7 @@ namespace ExamScheduler.Tests.Helpers
 
             if (course == null)
             {
-                throw new ArgumentException($"Provided course id (value = {courseId}) does not exist.");
+                throw new TestConfigException($"Provided course id (value = {courseId}) does not exist.");
             }
 
             var students = context
@@ -110,8 +115,10 @@ namespace ExamScheduler.Tests.Helpers
 
             if (students.Length == 0)
             {
-                throw new Exception("No students found in context.");
+                throw new TestConfigException("No students found in context.");
             }
+
+            var random = new Random();
 
             var algoLangs = context
                 .Mentors
@@ -119,13 +126,20 @@ namespace ExamScheduler.Tests.Helpers
                 .Where(m => m.IsActive)
                 .SelectMany(m => m.AlgoLanguages)
                 .Distinct()
-                .ToArray()
+                .ToList()
                 ;
 
-            if (algoLangs.Length == 0)
+            if (algoLangs.Count == 0)
             {
-                throw new Exception("No algo languages available for exam scheduling.");
+                throw new TestConfigException("No algo languages available for exam scheduling.");
             }
+
+            var algoLangCount = algoLangs.Count;
+
+            algoLangs = algoLangs
+                .Take(algoLangCount > 2 ? 3 : algoLangCount)
+                .ToList()
+                ;
 
             var output = new List<StudentExamDetail>();
 
@@ -134,19 +148,23 @@ namespace ExamScheduler.Tests.Helpers
                 output.Add(new StudentExamDetail
                 {
                     Student = students[i],
-                    AlgoLanguage = algoLangs[new Random().Next(algoLangs.Length)]
+                    AlgoLanguage = algoLangs[random.Next(algoLangs.Count)]
                 });
             }
 
             return output;
         }
 
+
         public static IFormFile ConvertToFormFile<T>(List<T> input)
         {
             var bytes = Encoding.UTF8.GetBytes(string.Join(Environment.NewLine, input.Select(i => i?.ToString())));
             var stream = new MemoryStream(bytes);
-            var file = new FormFile(stream, 0, stream.Length, "file", "file.csv");
-            file.ContentType = "text/csv";
+            var file = new FormFile(stream, 0, stream.Length, "file", "file.csv")
+            {
+                Headers = new HeaderDictionary(),
+                ContentType = "text/csv"
+            };
             return file;
         }
     }

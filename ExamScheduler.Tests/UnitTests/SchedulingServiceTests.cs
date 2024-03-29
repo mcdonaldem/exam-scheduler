@@ -1,10 +1,13 @@
 using ExamScheduler.Contexts;
 using ExamScheduler.Entities;
+using ExamScheduler.Exceptions;
 using ExamScheduler.Models;
+using ExamScheduler.Models.Enums;
 using ExamScheduler.Services;
 using ExamScheduler.Services.Interfaces;
 using ExamScheduler.Tests.TestSetup;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Moq;
 using static ExamScheduler.Tests.Helpers.SchedulingServiceTestsConfig;
@@ -34,9 +37,7 @@ namespace ExamScheduler.Tests.Services
         }
 
         [Theory]
-        [InlineData(1)]
-        [InlineData(2)]
-        [InlineData(3)]
+        [MemberData(nameof(GetValidCourseIds))]
         public async Task CreateSchedule_ValidInput_ReturnsOK(int courseId)
         {
             // Arrange
@@ -63,23 +64,154 @@ namespace ExamScheduler.Tests.Services
             Assert.Equal(studentDetails.Count, result.Count);
         }
 
-        public async Task CreateSchedule_InsufficientMentorSlotsOverall_ThrowsSchedulingException()
+        [Theory]
+        [MemberData(nameof(GetValidCourseIds))]
+        public async Task CreateSchedule_InsufficientMentorSlotsOverall_ThrowsSchedulingException(int courseId)
         {
+            // Arrange
+            MentorAvailsSetup(courseId);
+            StudentDetailsSetup(courseId);
 
+            mentorAvails = mentorAvails
+                .Take(studentDetails.Count - 1)
+                .ToList()
+                ;
+
+            var mentorFile = ConvertToFormFile(mentorAvails);
+            var studentFile = ConvertToFormFile(studentDetails);
+
+            parsingService
+                .Setup(ps => ps.GetStudentExamDetails(studentFile, courseId))
+                .Returns(studentDetails)
+                ;
+
+            parsingService
+                .Setup(ps => ps.GetMentorAvailabilities(mentorFile))
+                .Returns(mentorAvails)
+                ;
+
+            // Act
+            var result = Assert.Throws<SchedulingException>(() => service.CreateSchedule(mentorFile, studentFile, courseId));
+
+            // Assert
+            Assert.Equal("Not enough exam slots to cover all students.", result.Message);
         }
 
-        public async Task CreateSchedule_InsufficientMentorSlotsForLang_ThrowsSchedulingException()
+        [Theory]
+        [MemberData(nameof(GetValidCourseIds))]
+        public async Task CreateSchedule_InsufficientMentorSlotsForLang_ThrowsSchedulingException(int courseId)
         {
+            // Arrange
+            #region
+            MentorAvailsSetup(courseId);
+            StudentDetailsSetup(courseId);
 
+            var examsPerLang = studentDetails
+                .GroupBy(s => s.AlgoLanguage)
+                .ToDictionary(s => s.Key, s => s.Count())
+                ;
+
+            var maxSlotsPerLang = studentDetails
+                .Select(s => s.AlgoLanguage)
+                .Distinct()
+                .ToDictionary(s => s, s => mentorAvails
+                    .Where(m => m.Mentor.AlgoLanguages.Contains(s))
+                    .ToList()
+                    )
+                ;
+
+            var mostPopLang = examsPerLang
+                .MaxBy(l => l.Value)
+                ;
+
+            var slotsToRemove = maxSlotsPerLang[mostPopLang.Key]
+                .Take(maxSlotsPerLang[mostPopLang.Key].Count - mostPopLang.Value + 1)
+                ;
+
+            mentorAvails.RemoveAll(ma => slotsToRemove.Contains(ma));
+
+            var mentorFile = ConvertToFormFile(mentorAvails);
+            var studentFile = ConvertToFormFile(studentDetails);
+
+            parsingService
+                .Setup(ps => ps.GetStudentExamDetails(studentFile, courseId))
+                .Returns(studentDetails)
+                ;
+
+            parsingService
+                .Setup(ps => ps.GetMentorAvailabilities(mentorFile))
+                .Returns(mentorAvails)
+                ;
+            #endregion
+
+            // Act
+            var result = Assert.Throws<SchedulingException>(() => service.CreateSchedule(mentorFile, studentFile, courseId));
+
+            // Assert
+            Assert.Contains("Not enough mentor availability to cover", result.Message);
         }
 
-        public async Task CreateSchedule_DateTimeParseFail_ThrowsSchedulingException()
+        [Theory]
+        [MemberData(nameof(GetValidCourseIds))]
+        public async Task CreateSchedule_DateTimeParseFail_ThrowsSchedulingException(int courseId)
         {
+            // Arrange
+            MentorAvailsSetup(courseId);
+            StudentDetailsSetup(courseId);
 
+            mentorAvails
+                .ForEach(ma => ma.TimeSlot = (TimeSlot)4)
+                ;
+
+            var mentorFile = ConvertToFormFile(mentorAvails);
+            var studentFile = ConvertToFormFile(studentDetails);
+
+            parsingService
+                .Setup(ps => ps.GetStudentExamDetails(studentFile, courseId))
+                .Returns(studentDetails)
+                ;
+
+            parsingService
+                .Setup(ps => ps.GetMentorAvailabilities(mentorFile))
+                .Returns(mentorAvails)
+                ;
+
+            // Act
+            var result = Assert.Throws<SchedulingException>(() => service.CreateSchedule(mentorFile, studentFile, courseId));
+
+            // Assert
+            Assert.Contains("No such time slot found.", result.Message);
         }
 
-        public async Task CreateSchedule_TimeSpanParseFail_ThrowsSchedulingException()
+        [Theory]
+        [MemberData(nameof(GetValidCourseIds))]
+        public async Task CreateSchedule_TimeSpanParseFail_ThrowsSchedulingException(int courseId)
         {
+            // Arrange
+
+            configuration["ExamDuration"] = string.Empty;
+
+            MentorAvailsSetup(courseId);
+            StudentDetailsSetup(courseId);
+
+            var mentorFile = ConvertToFormFile(mentorAvails);
+            var studentFile = ConvertToFormFile(studentDetails);
+
+            parsingService
+                .Setup(ps => ps.GetStudentExamDetails(studentFile, courseId))
+                .Returns(studentDetails)
+                ;
+
+            parsingService
+                .Setup(ps => ps.GetMentorAvailabilities(mentorFile))
+                .Returns(mentorAvails)
+                ;
+
+            // Act
+            var result = Assert.Throws<SchedulingException>(() => service.CreateSchedule(mentorFile, studentFile, courseId));
+
+            // Assert
+            Assert.Equal(typeof(FormatException), result.InnerException?.GetType());
 
         }
 
@@ -91,6 +223,22 @@ namespace ExamScheduler.Tests.Services
         private void StudentDetailsSetup(int courseId)
         {
             studentDetails = GetStudentExamDetails(context, courseId);
+        }
+
+        public static IEnumerable<object[]> GetAlgoLanguages()
+        {
+            yield return [new AlgoLanguage("Java")];
+            yield return [new AlgoLanguage("C#")];
+            yield return [new AlgoLanguage("TypeScript")];
+            yield return [new AlgoLanguage("Python")];
+        }
+
+        public static IEnumerable<object[]> GetValidCourseIds()
+        {
+            for (int i = 1; i < 3; i++)
+            {
+                yield return [i];
+            }
         }
     }
 }
