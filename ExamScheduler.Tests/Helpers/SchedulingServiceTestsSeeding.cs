@@ -12,12 +12,9 @@ namespace ExamScheduler.Tests.Helpers
     {
         public static ApplicationContext Seed(ApplicationContext context)
         {
+            MentorServiceTestsSeeding.Seed(context);
+            StudentServiceTestsSeeding.Seed(context);
             return context;
-        }
-
-        private static ApplicationContext SeedStudents(ApplicationContext context)
-        {
-
         }
     }
 }
