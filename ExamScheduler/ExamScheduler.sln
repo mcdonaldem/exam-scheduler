@@ -5,7 +5,7 @@ VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExamScheduler", "ExamScheduler.csproj", "{8A8747AA-D0C5-4251-83EC-AE82677CD011}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExamSchedulerTests", "..\ExamSchedulerTests\ExamSchedulerTests.csproj", "{9B4641A6-647A-47DB-936B-E330D556D165}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExamScheduler.Tests", "..\ExamScheduler.Tests\ExamScheduler.Tests.csproj", "{57A7F906-3D99-4AAE-8692-2F60E80E9ABE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{8A8747AA-D0C5-4251-83EC-AE82677CD011}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8A8747AA-D0C5-4251-83EC-AE82677CD011}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8A8747AA-D0C5-4251-83EC-AE82677CD011}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9B4641A6-647A-47DB-936B-E330D556D165}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9B4641A6-647A-47DB-936B-E330D556D165}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9B4641A6-647A-47DB-936B-E330D556D165}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9B4641A6-647A-47DB-936B-E330D556D165}.Release|Any CPU.Build.0 = Release|Any CPU
+		{57A7F906-3D99-4AAE-8692-2F60E80E9ABE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{57A7F906-3D99-4AAE-8692-2F60E80E9ABE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{57A7F906-3D99-4AAE-8692-2F60E80E9ABE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{57A7F906-3D99-4AAE-8692-2F60E80E9ABE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -9,7 +9,7 @@ namespace ExamScheduler.Services
     {
         public byte[] ToByteArray(List<Exam> exams)
         {
-            return Encoding.UTF8.GetBytes(String.Join(Environment.NewLine, exams.Select(e => e.ToFileString())));
+            return Encoding.UTF8.GetBytes(string.Join(Environment.NewLine, exams.Select(e => e.ToFileString())));
         }
 
         public Stream ToStream(List<Exam> exams)
