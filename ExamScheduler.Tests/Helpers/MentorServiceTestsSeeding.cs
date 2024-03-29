@@ -12,7 +12,7 @@ namespace ExamScheduler.Tests.Helpers
             return context;
         }
 
-        private static ApplicationContext SeedAlgoLanguages(ApplicationContext context)
+        public static ApplicationContext SeedAlgoLanguages(ApplicationContext context)
         {
             // Seed algo languages
             List<AlgoLanguage> algoLangs = [
@@ -29,7 +29,7 @@ namespace ExamScheduler.Tests.Helpers
             return context;
         }
 
-        private static ApplicationContext SeedMentors(ApplicationContext context)
+        public static ApplicationContext SeedMentors(ApplicationContext context)
         {
             var langs = context.AlgoLanguages
                 .ToList()

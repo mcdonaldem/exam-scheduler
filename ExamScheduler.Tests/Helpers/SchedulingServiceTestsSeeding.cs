@@ -14,5 +14,10 @@ namespace ExamScheduler.Tests.Helpers
         {
             return context;
         }
+
+        private static ApplicationContext SeedStudents(ApplicationContext context)
+        {
+
+        }
     }
 }

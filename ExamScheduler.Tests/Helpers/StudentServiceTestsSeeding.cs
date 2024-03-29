@@ -18,7 +18,7 @@ namespace ExamScheduler.Tests.Helpers
             return context;
         }
 
-        private static ApplicationContext SeedCourses(ApplicationContext context)
+        public static ApplicationContext SeedCourses(ApplicationContext context)
         {
             List<Course> coursesToSave = [
                 new Course("Winter 2023"),
@@ -32,7 +32,7 @@ namespace ExamScheduler.Tests.Helpers
             return context;
         }
 
-        private static ApplicationContext SeedStudents(ApplicationContext context)
+        public static ApplicationContext SeedStudents(ApplicationContext context)
         {
             List<Student> studentsToSave = [
                 new Student("Noah Nordstrom"),
@@ -67,7 +67,7 @@ namespace ExamScheduler.Tests.Helpers
             return context;
         }
 
-        private static ApplicationContext SeedEnrollments(ApplicationContext context)
+        public static ApplicationContext SeedEnrollments(ApplicationContext context)
         {
             var courses = context.Courses
                 .ToArray()
