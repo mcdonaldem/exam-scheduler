@@ -41,6 +41,7 @@ namespace ExamScheduler.Tests.Services
         public async Task CreateSchedule_ValidInput_ReturnsOK(int courseId)
         {
             // Arrange
+            #region
             MentorAvailsSetup(courseId);
             StudentDetailsSetup(courseId);
 
@@ -56,6 +57,7 @@ namespace ExamScheduler.Tests.Services
                 .Setup(ps => ps.GetMentorAvailabilities(mentorFile))
                 .Returns(mentorAvails)
                 ;
+            #endregion
 
             // Act
             var result = service.CreateSchedule(mentorFile, studentFile, courseId);
@@ -69,6 +71,7 @@ namespace ExamScheduler.Tests.Services
         public async Task CreateSchedule_InsufficientMentorSlotsOverall_ThrowsSchedulingException(int courseId)
         {
             // Arrange
+            #region
             MentorAvailsSetup(courseId);
             StudentDetailsSetup(courseId);
 
@@ -89,6 +92,7 @@ namespace ExamScheduler.Tests.Services
                 .Setup(ps => ps.GetMentorAvailabilities(mentorFile))
                 .Returns(mentorAvails)
                 ;
+            #endregion
 
             // Act
             var result = Assert.Throws<SchedulingException>(() => service.CreateSchedule(mentorFile, studentFile, courseId));
@@ -156,6 +160,7 @@ namespace ExamScheduler.Tests.Services
         public async Task CreateSchedule_DateTimeParseFail_ThrowsSchedulingException(int courseId)
         {
             // Arrange
+            #region
             MentorAvailsSetup(courseId);
             StudentDetailsSetup(courseId);
 
@@ -175,6 +180,7 @@ namespace ExamScheduler.Tests.Services
                 .Setup(ps => ps.GetMentorAvailabilities(mentorFile))
                 .Returns(mentorAvails)
                 ;
+            #endregion
 
             // Act
             var result = Assert.Throws<SchedulingException>(() => service.CreateSchedule(mentorFile, studentFile, courseId));
@@ -188,7 +194,7 @@ namespace ExamScheduler.Tests.Services
         public async Task CreateSchedule_TimeSpanParseFail_ThrowsSchedulingException(int courseId)
         {
             // Arrange
-
+            #region
             configuration["ExamDuration"] = string.Empty;
 
             MentorAvailsSetup(courseId);
@@ -206,6 +212,7 @@ namespace ExamScheduler.Tests.Services
                 .Setup(ps => ps.GetMentorAvailabilities(mentorFile))
                 .Returns(mentorAvails)
                 ;
+            #endregion
 
             // Act
             var result = Assert.Throws<SchedulingException>(() => service.CreateSchedule(mentorFile, studentFile, courseId));
