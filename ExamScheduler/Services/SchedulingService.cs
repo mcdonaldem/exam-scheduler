@@ -32,12 +32,17 @@ namespace ExamScheduler.Services
                     var start = new DateTime(mentorSlot.Date, GetStartTime(mentorSlot.TimeSlot));
                     exams.Add(new Exam
                     {
+                        AlgoLanguage = studentDetails[i].AlgoLanguage,
                         Student = studentDetails[i].Student,
                         Mentor = mentorSlot.Mentor,
                         Start = start,
                         End = start.Add(TimeSpan.Parse(configuration["ExamDuration"] ?? "2:00"))
                     });
                     mentorAvails.Remove(mentorSlot);
+                }
+                catch (SchedulingException se)
+                {
+                    throw new SchedulingException(se.Message);
                 }
                 catch (Exception e) when (e is not StackOverflowException && e is not OutOfMemoryException)
                 {
