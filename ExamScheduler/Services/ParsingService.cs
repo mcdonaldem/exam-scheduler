@@ -93,7 +93,7 @@ namespace ExamScheduler.Services
             return person;
         }
 
-        private string[] ValidateFile(IFormFile file, ContentCategory contentCategory)
+        private string[] ValidateFile(IFormFile file)
         {
             if(file == null)
             {
