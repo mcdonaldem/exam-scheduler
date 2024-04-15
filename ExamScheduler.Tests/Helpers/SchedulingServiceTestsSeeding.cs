@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ExamScheduler.Contexts;
-using Microsoft.AspNetCore.Http;
+﻿using ExamScheduler.Contexts;
+using static ExamScheduler.Tests.Helpers.ApplicationContextSeeding;
 
 namespace ExamScheduler.Tests.Helpers
 {
@@ -12,8 +7,11 @@ namespace ExamScheduler.Tests.Helpers
     {
         public static ApplicationContext Seed(ApplicationContext context)
         {
-            MentorServiceTestsSeeding.Seed(context);
-            StudentServiceTestsSeeding.Seed(context);
+            SeedAlgoLanguages(context);
+            SeedMentors(context);
+            SeedCourses(context);
+            SeedStudents(context);
+            SeedEnrollments(context);
             return context;
         }
     }

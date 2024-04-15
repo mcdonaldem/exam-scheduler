@@ -103,7 +103,7 @@ namespace ExamScheduler.Services
             {
                 throw new SchedulingException("Incorrect file type provided.");
             }
-            else if(file.Length > 0)
+            else if(file.Length == 0)
             {
                 throw new SchedulingException("Provided file is empty.");
             }
@@ -111,12 +111,6 @@ namespace ExamScheduler.Services
             {
                 return file.ReadAsArray();
             }
-        }
-
-        public enum ContentCategory
-        {
-            Mentor,
-            Student
         }
     }
 }
