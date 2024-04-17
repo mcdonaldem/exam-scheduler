@@ -37,7 +37,7 @@ namespace ExamScheduler.Services
                 }
                 catch (Exception)
                 {
-                    throw new InvalidFileDataException("Invalid date or time format.");
+                    throw new InvalidFileDataException("Invalid date or time given.");
                 }
             }
             return output;
