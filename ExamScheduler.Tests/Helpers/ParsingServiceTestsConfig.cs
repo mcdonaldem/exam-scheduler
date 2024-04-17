@@ -103,6 +103,38 @@ namespace ExamScheduler.Tests.Helpers
             return avails;
         }
 
+        public static List<MentorAvailabilityForTesting> InsertIncorrectDateFormat(List<MentorAvailability> avails)
+        {
+            return avails
+                .Select(a =>
+                {
+                    return new MentorAvailabilityForTesting
+                    {
+                        Date = "12~2~2021",
+                        Mentor = a.Mentor.Name,
+                        TimeSlot = a.TimeSlot.ToString()
+                    };
+                })
+                .ToList()
+                ;
+        }
+
+        public static List<MentorAvailabilityForTesting> InsertIncorrectTimeSlots(List<MentorAvailability> avails)
+        {
+            return avails
+                .Select(a =>
+                {
+                    return new MentorAvailabilityForTesting
+                    {
+                        Date = a.Date.ToShortDateString(),
+                        Mentor = a.Mentor.Name,
+                        TimeSlot = ""
+                    };
+                })
+                .ToList()
+                ;
+        }
+
         public static List<StudentExamDetail> GetStudentExamDetails(ApplicationContext context, int courseId)
         {
             var course = context
@@ -161,16 +193,26 @@ namespace ExamScheduler.Tests.Helpers
                     AlgoLanguage = algoLangs[random.Next(algoLangs.Count)]
                 });
             }
-
             return output;
         }
 
         public static List<StudentExamDetail> InsertIncorrectStudentNames(List<StudentExamDetail> details)
         {
-            details.ForEach(d =>
+            details
+                .ForEach(d =>
             {
                 d.Student.Name = d.Student.Name.Replace('a', 'u');
             });
+            return details;
+        }
+
+        public static List<StudentExamDetail> InsertIncorrectAlgos(List<StudentExamDetail> details)
+        {
+            details
+                .ForEach(d =>
+                {
+                    d.AlgoLanguage.Name = "";
+                });
             return details;
         }
     }
